@@ -6,6 +6,7 @@ const app = express();
 
 // Import routes
 const userRoutes = require("./routes/auth");
+const adminRoutes = require("./routes/admin/auth")
 
 // Environment Variable
 env.config();
@@ -22,6 +23,7 @@ mongoose
 // Middlewares
 app.use(bodyParser.json());
 app.use("/api", userRoutes);
+app.use("/api", adminRoutes);
 
 // Listen the PORT
 app.listen(process.env.PORT, () => {

@@ -1,5 +1,5 @@
 // In this file - Building Logic
-const User = require("../models/user");
+const User = require("../../models/user");
 const jwt = require("jsonwebtoken");
 
 
@@ -9,7 +9,7 @@ exports.signup = (req, res) => {
     // Error Message if the user is exist
     if (user)
       return res.status(400).json({
-        message: "User Already Registered",
+        message: "Admin Already Registered",
       });
 
     const { firstName, lastName, email, password } = req.body; // --- Destructure the user info sent from client-side
@@ -21,6 +21,7 @@ exports.signup = (req, res) => {
       email,
       password,
       username: Math.random().toString(),
+      role: 'admin',
     });
 
     _user.save((error, data) => {
@@ -31,7 +32,7 @@ exports.signup = (req, res) => {
 
       if (data)
         return res.status(201).json({
-          message: "User created succesfully",
+          message: "Admin created succesfully",
         });
     });
   });
@@ -43,11 +44,11 @@ exports.signin = (req, res) => {
   User.findOne({ email: req.body.email }).exec((error, user) => {
     if (error)
       return res.status(400).json({
-        message: " User not found",
+        message: " Admin not found",
       });
 
     if (user) {
-      if (user.authenticate(req.body.password)) {  // Authenticate the user password
+      if (user.authenticate(req.body.password) && user.role === 'admin') {  // Authenticate the user password
       
         // Generate Token
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, {
