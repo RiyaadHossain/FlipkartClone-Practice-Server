@@ -5,7 +5,7 @@ const env = require("dotenv");
 const app = express();
 
 // Import routes
-const userRoutes = require("./routes/user");
+const userRoutes = require("./routes/auth");
 
 // Environment Variable
 env.config();
